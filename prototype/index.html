@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>BuildRush – Growth Referral Engine | NxtWave AI Workshop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-hover: #1f293d;
+      --border: #283548;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --accent: #06b6d4;
+      --text-main: #f9fafb;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --gold: #f59e0b;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font);
+      line-height: 1.5;
+      padding: 24px 16px 60px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(79, 70, 229, 0.15);
+      border: 1px solid rgba(79, 70, 229, 0.4);
+      color: #818cf8;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subhead {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    h2 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Goal Tracker */
+    .goal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+    .count-stat {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .target-badge {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .progress-bar-bg {
+      height: 14px;
+      background: #1e293b;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border);
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 0%;
+      border-radius: 999px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .milestones {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    .milestone-active {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    /* Form Inputs */
+    .input-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus {
+      border-color: var(--primary);
+    }
+    .phone-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .phone-prefix {
+      padding: 12px 14px;
+      background: #1e293b;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 13px 18px;
+      border-radius: 10px;
+      border: 0;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .btn-whatsapp {
+      background: #25d366;
+      color: #0b1f13;
+      font-weight: 700;
+    }
+    .btn-whatsapp:hover {
+      background: #20ba5a;
+    }
+    .btn-secondary {
+      background: #1e293b;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: #283548;
+    }
+    .btn-sim {
+      background: transparent;
+      border: 1px dashed var(--accent);
+      color: var(--accent);
+      font-size: 13px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .btn-sim:hover {
+      background: rgba(6, 182, 212, 0.1);
+    }
+
+    /* Referral Box */
+    .referral-highlight {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      margin: 14px 0;
+    }
+    .code-display {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--accent);
+      font-family: ui-monospace, monospace;
+      margin: 4px 0;
+    }
+    .stats-pill {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* AI Personalizer Box */
+    .ai-box {
+      background: linear-gradient(145deg, #131b2e, #1a2238);
+      border: 1px solid rgba(79, 70, 229, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #c084fc;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .project-match {
+      font-size: 13px;
+      color: #cbd5e1;
+      background: rgba(0, 0, 0, 0.25);
+      border-left: 3px solid var(--accent);
+      padding: 8px 12px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 12px;
+    }
+    .project-title {
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .pitch-preview {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      margin-bottom: 12px;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    /* Grids & Rows */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    .leaderboard-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 14px;
+    }
+    .leaderboard-row:last-child { border: 0; }
+    .rank-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #1e293b;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .rank-1 { background: var(--gold); color: #000; }
+    .rank-2 { background: #94a3b8; color: #000; }
+    .rank-3 { background: #b45309; color: #fff; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .sync-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #1e293b;
+      font-size: 11px;
+      margin-top: 6px;
+    }
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <header>
+    <div class="badge">NxtWave Growth Challenge · 7-Day Sprint</div>
+    <h1>BuildRush Referral Engine 🚀</h1>
+    <p class="subhead">
+      Target: 500 final-year registrations for <b>“Build Your First AI Project in 60 Minutes”</b> on a ₹2,000 budget.
+    </p>
+  </header>
+
+  <!-- Live Goal Progress Card -->
+  <div class="card">
+    <div class="goal-header">
+      <div>
+        <span class="count-stat" id="totalCount">0</span>
+        <span style="font-size: 16px; color: var(--text-muted);">/ 500 Registered</span>
+      </div>
+      <span class="target-badge" id="seatsLeft">500 seats remaining</span>
+    </div>
+
+    <div class="progress-bar-bg">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="milestones">
+      <span id="m100">● 100: Campus Buzz</span>
+      <span id="m250">● 250: Halfway Surge</span>
+      <span id="m500">● 500: Full House</span>
+    </div>
+  </div>
+
+  <!-- Registration Form Card -->
+  <div class="card" id="registerCard">
+    <h2><span>✍️</span> Step 1: Claim Free Seat &amp; Get Referral Code</h2>
+    
+    <div class="input-group">
+      <label for="studentName">Full Name</label>
+      <input id="studentName" placeholder="e.g. Bharadwaj Bollapalli" autocomplete="name">
+    </div>
+
+    <div class="input-group">
+      <label for="studentPhone">WhatsApp Mobile Number (For Workshop Link &amp; OTP)</label>
+      <div class="phone-box">
+        <span class="phone-prefix">+91</span>
+        <input id="studentPhone" type="tel" maxlength="10" placeholder="9876543210" pattern="[6-9][0-9]{9}">
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="input-group">
+        <label for="studentCollege">College / University</label>
+        <select id="studentCollege">
+          <option>SRM University AP</option>
+          <option>VIT-AP</option>
+          <option>KL University</option>
+          <option>Vignan's University</option>
+          <option>JNTU Kakinada</option>
+          <option>Other Engineering College</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="studentBranch">Engineering Branch</label>
+        <select id="studentBranch">
+          <option value="CSE">CSE / IT (Software / AI)</option>
+          <option value="ECE">ECE / EEE (IoT &amp; Embedded)</option>
+          <option value="MECH">Mechanical / Robotics</option>
+          <option value="CIVIL">Civil / Others</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="referralInput">Friend's Referral Code (Optional)</label>
+      <input id="referralInput" placeholder="e.g. ASHA214" style="text-transform: uppercase;">
+    </div>
+
+    <button class="btn btn-primary" id="btnRegister">
+      <span>🚀</span> Register &amp; Unlock Referral Dashboard
+    </button>
+  </div>
+
+  <!-- Student Referral Dashboard (Visible after registration) -->
+  <div class="card" id="dashboardCard" style="display: none;">
+    <h2><span>🎉</span> Step 2: Your Viral Referral Hub</h2>
+    
+    <div class="referral-highlight">
+      <div style="font-size: 13px; color: var(--text-muted);">YOUR UNIQUE REFERRAL CODE</div>
+      <div class="code-display" id="myCode">XXXX000</div>
+      <div class="stats-pill" id="referralStatus">0 friends joined with your code</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+        💡 Top 5 referrers win ₹200 mobile recharge each (₹1,000 prize pool).
+      </div>
+    </div>
+
+    <!-- AI Pitch & Project Personalizer -->
+    <div class="ai-box">
+      <div class="ai-badge">✨ AI Personalized WhatsApp Pitch</div>
+      
+      <div class="project-match">
+        <span>Target Project for <b id="branchLabel">CSE</b>: </span>
+        <span class="project-title" id="projectTitle">AI Resume &amp; Recruiter Matcher Agent</span>
+      </div>
+
+      <div class="grid-2" style="margin-bottom: 10px;">
+        <div>
+          <label for="pitchTone">Message Strategy / Tone</label>
+          <select id="pitchTone">
+            <option value="career">🎯 Placement &amp; Resume Impact</option>
+            <option value="fomo">🔥 Urgent FOMO (Seats Filling)</option>
+            <option value="friendly">🤝 Friendly Peer Study Group</option>
+            <option value="zero_code">⚡ Zero to One (No ML experience needed)</option>
+          </select>
+        </div>
+        <div>
+          <label>Target Audience</label>
+          <input disabled value="Final-Year Campus Peers" style="background:#1e293b; color:var(--text-muted);">
+        </div>
+      </div>
+
+      <div class="pitch-preview" id="pitchPreview">Loading tailored pitch...</div>
+
+      <div class="grid-2">
+        <button class="btn btn-whatsapp" id="btnShareWhatsApp">
+          <span>📲</span> Share on WhatsApp
+        </button>
+        <button class="btn btn-secondary" id="btnCopyPitch">
+          <span id="copyIcon">📋</span> Copy Message
+        </button>
+      </div>
+
+      <!-- Quick simulation for evaluators to test in 5 seconds -->
+      <button class="btn btn-sim" id="btnSimulate">
+        ⚡ Evaluator Demo: Simulate a friend registering with your code (+1 referral)
+      </button>
+    </div>
+  </div>
+
+  <!-- Leaderboards -->
+  <div class="grid-2">
+    <!-- Top Referrers -->
+    <div class="card">
+      <h2><span>🏆</span> Top Referrers</h2>
+      <div id="leaderboardList"></div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">
+        Top 5 win ₹200 recharge each (₹1,000 allocated from ₹2,000 budget).
+      </p>
+    </div>
+
+    <!-- College Battle -->
+    <div class="card">
+      <h2><span>🏫</span> College Battle</h2>
+      <div id="collegeList"></div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">
+        Winning college club earns official recognition &amp; verified badges.
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer & Status -->
+  <footer>
+    <p>BuildRush Growth Simulation · NxtWave Growth Intern Submission</p>
+    <div class="sync-status">
+      <span class="sync-dot" id="syncDot"></span>
+      <span id="syncText">Checking backend sync...</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // Configuration
+  const GOAL = 500;
+  const LOCAL_STORAGE_KEY = "buildrush_v2_users";
+  const MY_CODE_KEY = "buildrush_v2_mycode";
+  const API_BASE = "http://localhost:5000/api";
+
+  // AI Project Matches per Branch
+  const AI_PROJECTS = {
+    "CSE": {
+      title: "AI Resume & Recruiter Matcher Agent",
+      pitch: "Recruiters are filtering resumes using AI now. In this free 60-min NxtWave workshop, we're building a live AI Agent that screens resumes and prepares tailored interview answers."
+    },
+    "ECE": {
+      title: "Edge AI Voice & Gesture Command Classifier",
+      pitch: "Hardware meets AI: In this 60-min free workshop, you'll see how lightweight AI models run on sensors and IoT devices. Great booster for your final year capstone project."
+    },
+    "MECH": {
+      title: "Predictive Equipment Failure Predictor",
+      pitch: "Mechanical engineers who know AI get hired faster by smart manufacturing and auto firms. We're building a live predictive maintenance AI tool in 60 minutes."
+    },
+    "CIVIL": {
+      title: "Smart Material Cost & Structural Risk Estimator",
+      pitch: "Civil engineering is shifting to smart infrastructure. In 60 minutes, learn how to build an AI estimator to predict construction delays and material costs."
+    }
+  };
+
+  // State
+  let users = [];
+  let currentUserCode = null;
+  let backendActive = false;
+
+  // Initialize Data
+  function loadInitialState() {
+    try {
+      users = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+      currentUserCode = localStorage.getItem(MY_CODE_KEY) || null;
+    } catch(e) {
+      users = [];
+    }
+
+    if (!users.length) {
+      users = [
+        { name: "Asha K.", college: "SRM University AP", branch: "CSE", phone: "9848011223", code: "ASHA214", referredBy: "" },
+        { name: "Ravi Teja", college: "VIT-AP", branch: "ECE", phone: "9848022334", code: "RAVI482", referredBy: "" },
+        { name: "Meenakshi S.", college: "KL University", branch: "CSE", phone: "9848033445", code: "MEEN907", referredBy: "" },
+        { name: "Kiran Kumar", college: "SRM University AP", branch: "MECH", phone: "9848044556", code: "KIRA311", referredBy: "ASHA214" },
+        { name: "Sai Praneeth", college: "SRM University AP", branch: "CSE", phone: "9848055667", code: "SAIP056", referredBy: "ASHA214" },
+        { name: "Divya V.", college: "VIT-AP", branch: "CSE", phone: "9848066778", code: "DIVY128", referredBy: "RAVI482" },
+        { name: "Manoj P.", college: "Vignan's University", branch: "ECE", phone: "9848077889", code: "MANO654", referredBy: "ASHA214" }
+      ];
+      saveState();
+    }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(users));
+      if (currentUserCode) {
+        localStorage.setItem(MY_CODE_KEY, currentUserCode);
+      }
+    } catch(e) {}
+  }
+
+  // Generate unique clean referral code
+  function generateCode(name) {
+    const prefix = (name.replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 4)) || "STUD";
+    let code;
+    do {
+      code = prefix + Math.floor(100 + Math.random() * 900);
+    } while (users.some(u => u.code === code));
+    return code;
+  }
+
+  // Count referrals
+  function getReferralsForCode(code) {
+    return users.filter(u => u.referredBy === code).length;
+  }
+
+  // Get share URL
+  function getShareLink(code) {
+    return window.location.href.split("#")[0].split("?")[0] + "#" + code;
+  }
+
+  // Generate Personalized WhatsApp Message
+  function generatePitch(branch, tone, code) {
+    const project = AI_PROJECTS[branch] || AI_PROJECTS["CSE"];
+    const link = getShareLink(code);
+
+    switch(tone) {
+      case "career":
+        return `🎯 *Placement Alert for Final Years!*\n\n${project.pitch}\n\nNxtWave is conducting a FREE live 60-min workshop: *"Build Your First AI Project in 60 Minutes"*.\n\nClaim your free seat with my referral code *${code}* here:\n👉 ${link}`;
+      
+      case "fomo":
+        return `🔥 *Only 50 seats left from our college!*\n\nEveryone is registering for NxtWave's free live workshop: *"Build Your First AI Project in 60 Minutes"*. We're building ${project.title} live.\n\nUse my code *${code}* to get confirmed access:\n👉 ${link}`;
+
+      case "zero_code":
+        return `⚡ *Don't have prior AI/ML experience? No worries!*\n\nIn just 60 minutes, NxtWave walks you step-by-step through building your first real AI project live on your laptop.\n\nFree registration with code *${code}*:\n👉 ${link}`;
+
+      case "friendly":
+      default:
+        return `Hey! I just registered for NxtWave's free live workshop: *"Build Your First AI Project in 60 Minutes"*. Let's attend together and add an AI project to our resumes.\n\nJoin with my code *${code}*:\n👉 ${link}`;
+    }
+  }
+
+  // Render Dashboard & Leaderboards
+  function renderUI() {
+    const total = users.length;
+    document.getElementById("totalCount").textContent = total;
+    document.getElementById("seatsLeft").textContent = `${Math.max(0, GOAL - total)} seats remaining`;
+    
+    // Progress Fill
+    const pct = Math.min(100, Math.round((total / GOAL) * 100));
+    document.getElementById("progressFill").style.width = pct + "%";
+
+    // Milestones highlight
+    document.getElementById("m100").className = total >= 100 ? "milestone-active" : "";
+    document.getElementById("m250").className = total >= 250 ? "milestone-active" : "";
+    document.getElementById("m500").className = total >= 500 ? "milestone-active" : "";
+
+    // Leaderboard: Top Referrers
+    const referrers = users.map(u => ({
+      name: u.name,
+      code: u.code,
+      count: getReferralsForCode(u.code)
+    })).sort((a, b) => b.count - a.count).slice(0, 5);
+
+    const leaderboardEl = document.getElementById("leaderboardList");
+    leaderboardEl.innerHTML = referrers.map((r, i) => `
+      <div class="leaderboard-row">
+        <div>
+          <span class="rank-num ${i === 0 ? 'rank-1' : (i === 1 ? 'rank-2' : (i === 2 ? 'rank-3' : ''))}">${i + 1}</span>
+          <b>${escapeHtml(r.name)}</b> <span style="font-size:12px; color:var(--text-muted);">(${r.code})</span>
+        </div>
+        <div><b style="color:var(--accent);">${r.count}</b> referrals</div>
+      </div>
+    `).join("");
+
+    // Leaderboard: College Battle
+    const collegeCounts = {};
+    users.forEach(u => {
+      collegeCounts[u.college] = (collegeCounts[u.college] || 0) + 1;
+    });
+
+    const collegesSorted = Object.keys(collegeCounts).sort((a, b) => collegeCounts[b] - collegeCounts[a]);
+    const collegeEl = document.getElementById("collegeList");
+    collegeEl.innerHTML = collegesSorted.map((col, idx) => `
+      <div class="leaderboard-row">
+        <div>
+          <span class="rank-num">${idx + 1}</span>
+          <span>${escapeHtml(col)}</span>
+        </div>
+        <div><b style="color:var(--primary);">${collegeCounts[col]}</b> signups</div>
+      </div>
+    `).join("");
+
+    // If User Registered, Update User Dashboard
+    if (currentUserCode) {
+      const me = users.find(u => u.code === currentUserCode);
+      if (me) {
+        document.getElementById("dashboardCard").style.display = "block";
+        document.getElementById("myCode").textContent = me.code;
+        
+        const count = getReferralsForCode(me.code);
+        document.getElementById("referralStatus").textContent = `🎉 ${count} friend${count === 1 ? '' : 's'} joined with your code`;
+        
+        document.getElementById("branchLabel").textContent = me.branch || "CSE";
+        const project = AI_PROJECTS[me.branch] || AI_PROJECTS["CSE"];
+        document.getElementById("projectTitle").textContent = project.title;
+
+        updatePitchBox(me.branch, me.code);
+      }
+    }
+  }
+
+  function updatePitchBox(branch, code) {
+    const tone = document.getElementById("pitchTone").value;
+    const msg = generatePitch(branch, tone, code);
+    document.getElementById("pitchPreview").textContent = msg;
+
+    // Update WhatsApp Button Link
+    const waUrl = "https://wa.me/?text=" + encodeURIComponent(msg);
+    document.getElementById("btnShareWhatsApp").onclick = () => window.open(waUrl, "_blank");
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[m]);
+  }
+
+  // Check Backend Status
+  async function checkBackend() {
+    try {
+      const res = await fetch(API_BASE + "/health", { signal: AbortSignal.timeout(1500) });
+      if (res.ok) {
+        backendActive = true;
+        document.getElementById("syncDot").style.background = "#10b981";
+        document.getElementById("syncText").textContent = "🟢 Live Express API Connected";
+        return;
+      }
+    } catch(e) {}
+    backendActive = false;
+    document.getElementById("syncDot").style.background = "#06b6d4";
+    document.getElementById("syncText").textContent = "⚡ Standalone Demo Mode (LocalStorage)";
+  }
+
+  // Setup Event Listeners
+  window.addEventListener("DOMContentLoaded", () => {
+    loadInitialState();
+    checkBackend();
+
+    // Check URL Hash for referral code (e.g. #ASHA214)
+    const hash = window.location.hash.replace("#", "").trim().toUpperCase();
+    if (hash) {
+      document.getElementById("referralInput").value = hash;
+    }
+
+    // Register Button Click
+    document.getElementById("btnRegister").addEventListener("click", async () => {
+      const name = document.getElementById("studentName").value.trim();
+      const phone = document.getElementById("studentPhone").value.trim();
+      const college = document.getElementById("studentCollege").value;
+      const branch = document.getElementById("studentBranch").value;
+      const refInput = document.getElementById("referralInput").value.trim().toUpperCase();
+
+      if (!name) {
+        alert("Please enter your name");
+        document.getElementById("studentName").focus();
+        return;
+      }
+
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        alert("Please enter a valid 10-digit Indian WhatsApp mobile number (starting with 6, 7, 8, or 9)");
+        document.getElementById("studentPhone").focus();
+        return;
+      }
+
+      // Check duplicate phone locally
+      if (users.some(u => u.phone === phone)) {
+        alert("This mobile number is already registered for the workshop!");
+        return;
+      }
+
+      // Validate referral code
+      let referredBy = "";
+      if (refInput && users.some(u => u.code === refInput)) {
+        referredBy = refInput;
+      }
+
+      let newCode = generateCode(name);
+
+      if (backendActive) {
+        try {
+          const res = await fetch(API_BASE + "/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, college, branch, phone, ref: referredBy })
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            alert(data.error || "Registration failed on server");
+            return;
+          }
+          if (data.code) newCode = data.code;
+        } catch(e) {
+          console.warn("Backend API sync failed, continuing locally:", e);
+        }
+      }
+
+      const newUser = { name, college, branch, phone, code: newCode, referredBy };
+      
+      users.push(newUser);
+      currentUserCode = newCode;
+      saveState();
+
+      // Trigger Confetti Celebration
+      if (window.confetti) {
+        confetti({ particleCount: 75, spread: 60, origin: { y: 0.6 } });
+      }
+
+      renderUI();
+
+      // Scroll to dashboard
+      document.getElementById("dashboardCard").scrollIntoView({ behavior: "smooth" });
+    });
+
+    // Pitch Tone Change
+    document.getElementById("pitchTone").addEventListener("change", () => {
+      if (currentUserCode) {
+        const me = users.find(u => u.code === currentUserCode);
+        if (me) updatePitchBox(me.branch, me.code);
+      }
+    });
+
+    // Copy Pitch Button
+    document.getElementById("btnCopyPitch").addEventListener("click", () => {
+      const text = document.getElementById("pitchPreview").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        document.getElementById("copyIcon").textContent = "✓";
+        setTimeout(() => { document.getElementById("copyIcon").textContent = "📋"; }, 2000);
+      });
+    });
+
+    // Evaluator Simulation Button (+1 Referral Demo)
+    document.getElementById("btnSimulate").addEventListener("click", () => {
+      if (!currentUserCode) return;
+      
+      const sampleNames = ["Teja V.", "Naveen K.", "Sneha R.", "Harika B.", "Aditya S.", "Poojitha M."];
+      const colleges = ["SRM University AP", "VIT-AP", "KL University", "Vignan's University"];
+      const branches = ["CSE", "ECE", "MECH", "CIVIL"];
+
+      const randomName = sampleNames[Math.floor(Math.random() * sampleNames.length)];
+      const randomCol = colleges[Math.floor(Math.random() * colleges.length)];
+      const randomBranch = branches[Math.floor(Math.random() * branches.length)];
+      const randomPhone = "9" + Math.floor(100000000 + Math.random() * 900000000);
+
+      if (backendActive) {
+        fetch(API_BASE + "/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: randomName,
+            college: randomCol,
+            branch: randomBranch,
+            phone: randomPhone,
+            ref: currentUserCode
+          })
+        }).catch(() => {});
+      }
+
+      const simUser = {
+        name: randomName,
+        college: randomCol,
+        branch: randomBranch,
+        phone: randomPhone,
+        code: generateCode(randomName),
+        referredBy: currentUserCode
+      };
+
+      users.push(simUser);
+      saveState();
+
+      if (window.confetti) {
+        confetti({ particleCount: 40, spread: 50, origin: { y: 0.7 } });
+      }
+
+      renderUI();
+    });
+
+    renderUI();
+  });
+</script>
+</body>
+</html>

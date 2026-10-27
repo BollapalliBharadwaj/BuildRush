@@ -1,0 +1,6 @@
+node_modules/
+server/buildrush.db
+server/buildrush.db-wal
+server/buildrush.db-shm
+.env
+.DS_Store
